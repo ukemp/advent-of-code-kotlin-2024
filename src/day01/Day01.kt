@@ -6,29 +6,29 @@ import kotlin.to
 
 fun main() {
 
-    fun readInput(input: List<String>): Pair<MutableList<Int>, MutableList<Int>> {
-        return input.fold(mutableListOf<Int>() to mutableListOf<Int>()) { ids, line ->
-            ids.first.add(line.substringBefore(' ').toInt())
-            ids.second.add(line.substringAfter(' ').trim().toInt())
+    fun readSortedInput(input: List<String>): Pair<MutableList<Long>, MutableList<Long>> {
+        return input.fold(mutableListOf<Long>() to mutableListOf<Long>()) { ids, line ->
+            ids.first.add(line.substringBefore(' ').toLong())
+            ids.second.add(line.substringAfterLast(' ').toLong())
             ids
+        }.apply {
+            first.sort()
+            second.sort()
         }
     }
 
     fun part1(input: List<String>): Long {
-        val (left, right) = readInput(input)
-        left.sort()
-        right.sort()
+        val (left, right) = readSortedInput(input)
 
-        return left.mapIndexed { index, value -> (value - right[index]).absoluteValue }.sum().toLong()
+        return left.zip(right) { l, r -> (l - r).absoluteValue }.sum()
     }
 
     fun part2(input: List<String>): Long {
-        val (left, right) = readInput(input)
-        left.sort()
-        right.sort()
+        val (left, right) = readSortedInput(input)
 
         var startIndex = 0
         return left.sumOf { id ->
+            // count = right.count { it == id } is more than 4 some slower
             var count = 0
             for (index in startIndex..<right.size) {
                 if (right[index] == id) {
@@ -39,7 +39,7 @@ fun main() {
                 }
             }
             count * id
-        }.toLong()
+        }
     }
 
     val testInput = readInput("Day01_test")
