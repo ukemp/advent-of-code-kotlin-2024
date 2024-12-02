@@ -23,7 +23,15 @@ fun main() {
             path.createDirectory()
             val dst = path.resolve("Day$day.kt")
             template.useLines { lines ->
-                dst.writeLines(lines.map { line -> if (line.startsWith("package")) "package $packageName" else line })
+                dst.writeLines(lines.map { line ->
+                    if (line.startsWith("package")) {
+                        "package $packageName"
+                    } else if (line.contains("\"DayXX")) {
+                        line.replace("\"DayXX", "\"Day$day")
+                    } else {
+                        line
+                    }
+                })
             }
         } else {
             println("Skipping $path...")

@@ -11,10 +11,11 @@ fun main() {
         return input.size.toLong()
     }
 
-    val testInput = readInput("Day01_test")
+    val testInput = readInput("DayXX_test")
     check(part1(testInput).also(::println) == 1L)
+    //check(part2(testInput).also(::println) == 1L)
 
-    val input = readInput("Day01")
+    val input = readInput("DayXX")
     println(part1(input))
     println(part2(input))
 }
