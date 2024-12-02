@@ -1,6 +1,7 @@
 package template
 
 import readInput
+import kotlin.time.measureTime
 
 fun main() {
     fun part1(input: List<String>): Long {
@@ -16,6 +17,12 @@ fun main() {
     //check(part2(testInput).also(::println) == 1L)
 
     val input = readInput("DayXX")
-    println(part1(input))
-    println(part2(input))
+
+    measureTime {
+        println(part1(input))
+    }.also { println("Solved part 1 in $it") }
+
+    measureTime {
+        println(part2(input))
+    }.also { println("Solved part 2 in $it") }
 }
