@@ -1,6 +1,7 @@
 @file:Suppress("unused")
 
 import kotlin.math.absoluteValue
+import kotlin.math.sign
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun Coordinate(x: Int, y: Int) = Coordinate(packInts(x, y))
@@ -25,63 +26,44 @@ value class Coordinate(private val packedValue: Long) {
     val y: Int
         get() = (packedValue and 0xFFFFFFFF).toInt()
 
+    operator fun plus(other: Coordinate) = Coordinate(packInts(x + other.x, y + other.y))
+
+    operator fun minus(other: Coordinate) = Coordinate(packInts(x - other.x, y - other.y))
+
     operator fun component1(): Int = x
 
     operator fun component2(): Int = y
 
     operator fun rangeTo(other: Coordinate): Iterator<Coordinate> {
-        return if (this.x == other.x) {
-            if (this.y < other.y) {
-                (this.y..other.y).map { y -> Coordinate(this.x, y) }.iterator()
-            } else {
-                (this.y downTo other.y).map { y -> Coordinate(this.x, y) }.iterator()
-            }
-        } else if (this.y == other.y) {
-            if (this.x < other.x) {
-                (this.x..other.x).map { x -> Coordinate(x, this.y) }.iterator()
-            } else {
-                (this.x downTo other.x).map { x -> Coordinate(x, this.y) }.iterator()
-            }
+        val diff = other - this
+        val dx = diff.x.sign
+        val dy = diff.y.sign
+
+        if (dx == 0 || dy == 0 || diff.x.absoluteValue == diff.y.absoluteValue) {
+            val d = Coordinate(dx, dy)
+            return buildList {
+                add(this@Coordinate)
+                while (last() != other) {
+                    add(last() + d)
+                }
+            }.iterator()
         } else {
-            throw IllegalArgumentException("For a coordinate range at least one dimension must be identical: $this .. $other")
+            throw IllegalArgumentException("Cannot create $this..$other (only vertical, horizontal or diagonal ranges are supported")
         }
     }
 
-    fun copy(x: Int = this.x, y: Int = this.y) = Coordinate(x, y)
+    val axialNeighbors: List<Coordinate>
+        get() = listOf(UP, DOWN, LEFT, RIGHT).map { it + this }
 
-    fun moveBy(dx: Int = 0, dy: Int = 0) = Coordinate(x + dx, y + dy)
+    val diagonalNeighbors: List<Coordinate>
+        get() = listOf(UP + LEFT, UP + RIGHT, DOWN + LEFT, DOWN + RIGHT).map { it + this }
 
-    fun distanceTo(other: Coordinate): Long {
-        return ((this.x - other.x).absoluteValue + (this.y - other.y).absoluteValue).toLong()
-    }
+    val neighbors: List<Coordinate>
+        get() = axialNeighbors + diagonalNeighbors
 
-    fun neighbours(xRange: IntRange = 0..Int.MAX_VALUE, yRange: IntRange = 0..Int.MAX_VALUE): List<Coordinate> {
-        return buildList {
-            if ((y - 1) in yRange) {
-                add(moveBy(dy = -1))
-            }
-            if ((y - 1) in yRange && (x + 1) in xRange) {
-                add(moveBy(dy = -1, dx = 1))
-            }
-            if ((x + 1) in xRange) {
-                add(moveBy(dx = 1))
-            }
-            if ((y + 1) in yRange && (x + 1) in xRange) {
-                add(moveBy(dy = 1, dx = 1))
-            }
-            if ((y + 1) in yRange) {
-                add(moveBy(dy = 1))
-            }
-            if ((y + 1) in yRange && (x - 1) in xRange) {
-                add(moveBy(dy = 1, dx = -1))
-            }
-            if ((x - 1) in xRange) {
-                add(moveBy(dx = -1))
-            }
-            if ((y - 1) in yRange && (x - 1) in xRange) {
-                add(moveBy(dy = -1, dx = -1))
-            }
-        }
+
+    fun manhattenDistanceTo(other: Coordinate): Long {
+        return (x - other.x).absoluteValue.toLong() + (y - other.y).absoluteValue
     }
 
     override fun toString(): String {
@@ -89,11 +71,26 @@ value class Coordinate(private val packedValue: Long) {
     }
 
     companion object {
-
-        val Zero = Coordinate(0, 0)
+        val ZERO = Coordinate(0, 0)
+        val UP = Coordinate(0, -1)
+        val DOWN = Coordinate(0, 1)
+        val LEFT = Coordinate(-1, 0)
+        val RIGHT = Coordinate(1, 0)
     }
 }
 
 fun packInts(x: Int, y: Int): Long {
     return (x.toLong() shl 32) or (y.toLong() and 0xFFFFFFFF)
+}
+
+fun main() {
+    (Coordinate(5, 5)..Coordinate(5, 5)).forEach { println(it) }
+    println()
+    (Coordinate(5, 15)..Coordinate(5, 10)).forEach { println(it) }
+    println()
+    (Coordinate(5, 5)..Coordinate(10, 10)).forEach { println(it) }
+    println()
+    (Coordinate(15, 15)..Coordinate(10, 10)).forEach { println(it) }
+    println()
+    (Coordinate(10, 15)..Coordinate(10, 10)).forEach { println(it) }
 }
