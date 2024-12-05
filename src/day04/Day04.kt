@@ -2,7 +2,7 @@ package day04
 
 import CharGrid
 import Coordinate
-import readInput
+import readLines
 import kotlin.time.measureTime
 
 fun main() {
@@ -45,11 +45,11 @@ fun main() {
         return sum
     }
 
-    val testInput = readInput("Day04_test")
+    val testInput = readLines("Day04_test")
     check(part1(testInput).also(::println) == 18L)
     check(part2(testInput).also(::println) == 9L)
 
-    val input = readInput("Day04")
+    val input = readLines("Day04")
 
     measureTime {
         part1(input).also(::println)

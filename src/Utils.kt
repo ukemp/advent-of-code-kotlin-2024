@@ -6,7 +6,9 @@ import kotlin.io.path.readText
 /**
  * Reads lines from the given input txt file.
  */
-fun readInput(name: String) = Path("src/$name.txt").readText().trim().lines()
+fun readLines(name: String) = Path("src/$name.txt").readText().trim().lines()
+
+fun readText(name: String) = Path("src/$name.txt").readText().trim()
 
 /**
  * Converts string to md5 hash.
@@ -16,3 +18,9 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
     .padStart(32, '0')
 
 fun List<String>.mapToInt() = map { it.trim().toInt() }
+
+fun <T> MutableList<T>.swap(i1: Int, i2: Int) {
+    val v1 = get(i1)
+    set(i1, get(i2))
+    set(i2, v1)
+}

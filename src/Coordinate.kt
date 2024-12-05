@@ -82,15 +82,3 @@ value class Coordinate(private val packedValue: Long) {
 fun packInts(x: Int, y: Int): Long {
     return (x.toLong() shl 32) or (y.toLong() and 0xFFFFFFFF)
 }
-
-fun main() {
-    (Coordinate(5, 5)..Coordinate(5, 5)).forEach { println(it) }
-    println()
-    (Coordinate(5, 15)..Coordinate(5, 10)).forEach { println(it) }
-    println()
-    (Coordinate(5, 5)..Coordinate(10, 10)).forEach { println(it) }
-    println()
-    (Coordinate(15, 15)..Coordinate(10, 10)).forEach { println(it) }
-    println()
-    (Coordinate(10, 15)..Coordinate(10, 10)).forEach { println(it) }
-}

@@ -1,6 +1,6 @@
 package template
 
-import readInput
+import readLines
 import kotlin.time.measureTime
 
 fun main() {
@@ -12,11 +12,11 @@ fun main() {
         return input.size.toLong()
     }
 
-    val testInput = readInput("DayXX_test")
+    val testInput = readLines("DayXX_test")
     check(part1(testInput).also(::println) == 1L)
     //check(part2(testInput).also(::println) == 1L)
 
-    val input = readInput("DayXX")
+    val input = readLines("DayXX")
 
     measureTime {
         println(part1(input))

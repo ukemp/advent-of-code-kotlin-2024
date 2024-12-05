@@ -1,28 +1,19 @@
 package day05
 
 import mapToInt
-import readInput
+import readText
+import swap
 import kotlin.time.measureTime
 
 fun main() {
 
-    fun parseRules(input: List<String>): List<Pair<Int, Int>> {
-        return input.mapNotNull { line ->
-            if (line.contains("|")) {
-                line.substringBefore('|').toInt() to line.substringAfter('|').toInt()
-            } else {
-                null
-            }
-        }
-    }
+    fun parseInput(input: String): Pair<List<Pair<Int, Int>>, List<List<Int>>> {
+        val (firstPart, secondPart) = input.split("\n\n")
 
-    fun parsePages(input: List<String>): List<List<Int>> {
-        return input.mapNotNull { line ->
-            if (line.contains(",")) {
-                line.split(",").mapToInt()
-            } else {
-                null
-            }
+        return firstPart.lines().map { line ->
+            line.substringBefore('|').toInt() to line.substringAfter('|').toInt()
+        } to secondPart.lines().map { line ->
+            line.split(",").mapToInt()
         }
     }
 
@@ -36,26 +27,18 @@ fun main() {
         }
     }
 
-    fun MutableList<Int>.swap(i1: Int, i2: Int) {
-        val v1 = get(i1)
-        set(i1, get(i2))
-        set(i2, v1)
-    }
+    fun part1(input: String): Long {
+        val (rules, updates) = parseInput(input)
 
-    fun part1(input: List<String>): Long {
-        val rules = parseRules(input)
-        val pagesList = parsePages(input)
-
-        return pagesList.sumOf { pages ->
+        return updates.sumOf { pages ->
             if (isOrdered(pages, rules)) pages[pages.size / 2].toLong() else 0L
         }
     }
 
-    fun part2(input: List<String>): Long {
-        val rules = parseRules(input)
-        val pagesList = parsePages(input)
+    fun part2(input: String): Long {
+        val (rules, updates) = parseInput(input)
 
-        return pagesList.sumOf {
+        return updates.sumOf {
             val pages = it.toMutableList()
             if (isOrdered(pages, rules)) {
                 0L
@@ -76,11 +59,11 @@ fun main() {
         }
     }
 
-    val testInput = readInput("Day05_test")
+    val testInput = readText("Day05_test")
     check(part1(testInput).also(::println) == 143L)
     check(part2(testInput).also(::println) == 123L)
 
-    val input = readInput("Day05")
+    val input = readText("Day05")
 
     measureTime {
         println(part1(input))

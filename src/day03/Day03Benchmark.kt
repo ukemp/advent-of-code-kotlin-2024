@@ -4,7 +4,7 @@ import kotlinx.benchmark.Benchmark
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.Setup
 import kotlinx.benchmark.State
-import readInput
+import readLines
 
 @State(Scope.Benchmark)
 class Day03Benchmark() {
@@ -20,7 +20,7 @@ class Day03Benchmark() {
 
     @Setup
     fun prepare() {
-        input = readInput("Day03")
+        input = readLines("Day03")
     }
 
     @Benchmark

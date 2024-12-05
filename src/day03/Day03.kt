@@ -1,6 +1,6 @@
 package day03
 
-import readInput
+import readLines
 import kotlin.time.measureTime
 
 val mul = """mul\((\d+),(\d+)\)""".toRegex()
@@ -70,11 +70,11 @@ fun part2AllRegex(input: List<String>): Long {
 }
 
 fun main() {
-    val testInput = readInput("Day03_test")
+    val testInput = readLines("Day03_test")
     check(part1(testInput).also(::println) == 161L)
     check(part2IndexOf(testInput).also(::println) == 48L)
 
-    val input = readInput("Day03")
+    val input = readLines("Day03")
 
     measureTime {
         part1(input).also(::println)

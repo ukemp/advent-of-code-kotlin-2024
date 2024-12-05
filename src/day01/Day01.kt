@@ -1,6 +1,6 @@
 package day01
 
-import readInput
+import readLines
 import kotlin.math.absoluteValue
 import kotlin.to
 
@@ -42,10 +42,10 @@ fun main() {
         }
     }
 
-    val testInput = readInput("Day01_test")
+    val testInput = readLines("Day01_test")
     check(part1(testInput).also(::println) == 11L)
 
-    val input = readInput("Day01")
+    val input = readLines("Day01")
     println(part1(input))
     println(part2(input))
 }
