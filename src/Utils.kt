@@ -15,10 +15,4 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
     .toString(16)
     .padStart(32, '0')
 
-fun log(value: Any?) {
-    if (value != null) {
-        println(value)
-    } else {
-        println("null")
-    }
-}
+fun List<String>.mapToInt() = map { it.trim().toInt() }

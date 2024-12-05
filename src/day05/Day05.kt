@@ -1,5 +1,6 @@
 package day05
 
+import mapToInt
 import readInput
 import kotlin.time.measureTime
 
@@ -9,6 +10,16 @@ fun main() {
         return input.mapNotNull { line ->
             if (line.contains("|")) {
                 line.substringBefore('|').toInt() to line.substringAfter('|').toInt()
+            } else {
+                null
+            }
+        }
+    }
+
+    fun parsePages(input: List<String>): List<List<Int>> {
+        return input.mapNotNull { line ->
+            if (line.contains(",")) {
+                line.split(",").mapToInt()
             } else {
                 null
             }
@@ -33,40 +44,34 @@ fun main() {
 
     fun part1(input: List<String>): Long {
         val rules = parseRules(input)
-        return input.sumOf { line ->
-            if (line.contains(",")) {
-                val pages = line.split(",").map { it.toInt() }
-                if (isOrdered(pages, rules)) pages[pages.size / 2].toLong() else 0L
-            } else {
-                0L
-            }
+        val pagesList = parsePages(input)
+
+        return pagesList.sumOf { pages ->
+            if (isOrdered(pages, rules)) pages[pages.size / 2].toLong() else 0L
         }
     }
 
     fun part2(input: List<String>): Long {
         val rules = parseRules(input)
-        return input.sumOf { line ->
-            if (line.contains(",")) {
-                val pages = line.split(",").map { it.toInt() }.toMutableList()
-                var isOrdered = isOrdered(pages, rules)
-                if (isOrdered) {
-                    0L
-                } else {
-                    while (!isOrdered(pages, rules)) {
-                        rules.forEach { rule ->
-                            val (i1, i2) = indexesOf(pages, rule)
-                            if (i1 != -1 && i2 != -1) {
-                                if (i1 >= i2) {
-                                    pages.swap(i1, i2)
-                                }
+        val pagesList = parsePages(input)
+
+        return pagesList.sumOf {
+            val pages = it.toMutableList()
+            if (isOrdered(pages, rules)) {
+                0L
+            } else {
+                do {
+                    rules.forEach { rule ->
+                        val (i1, i2) = indexesOf(pages, rule)
+                        if (i1 != -1 && i2 != -1) {
+                            if (i1 >= i2) {
+                                pages.swap(i1, i2)
                             }
                         }
                     }
+                } while (!isOrdered(pages, rules))
 
-                    pages[pages.size / 2].toLong()
-                }
-            } else {
-                0L
+                pages[pages.size / 2].toLong()
             }
         }
     }
