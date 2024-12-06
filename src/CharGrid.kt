@@ -1,4 +1,6 @@
-class CharGrid(private val lines: List<String>) {
+class CharGrid(input: List<String>) {
+
+    private val lines = input.toMutableList()
 
     init {
         check(lines.map { it.length }.toSet().size == 1) {
@@ -10,6 +12,10 @@ class CharGrid(private val lines: List<String>) {
 
     val height = lines.size
 
+    val horizontalIndices = IntRange(0, width - 1)
+
+    val verticalIndices = IntRange(0, height - 1)
+
     operator fun get(x: Int, y: Int, invalid: Char? = null): Char? {
         return if (y in lines.indices && x in lines[y].indices) {
             lines[y][x]
@@ -20,13 +26,30 @@ class CharGrid(private val lines: List<String>) {
 
     operator fun get(c: Coordinate, invalid: Char?) = get(c.x, c.y, invalid)
 
+    operator fun set(c: Coordinate, newChar: Char): CharGrid {
+        lines[c.y] = "${lines[c.y].substring(0..<c.x)}$newChar${lines[c.y].substring(c.x + 1)}"
+        return this
+    }
+
     fun forEach(block: (CharGrid, Coordinate, Char) -> Unit) {
-        for (y in 0..lines.lastIndex) {
-            for (x in 0..lines[0].lastIndex) {
+        for (y in verticalIndices) {
+            for (x in horizontalIndices) {
                 block(this, Coordinate(x, y), get(x, y)!!)
             }
         }
     }
+
+    fun indexOf(search: Char): Coordinate {
+        for (y in verticalIndices) {
+            val index = lines[y].indexOf(search)
+            if (index != -1) {
+                return Coordinate(index, y)
+            }
+        }
+        error("Couldn't find a matching character")
+    }
+
+    fun isInside(c: Coordinate) = c.x in horizontalIndices && c.y in verticalIndices
 
     fun wordTo(from: Coordinate, relative: Coordinate): String {
         return buildString {
@@ -34,5 +57,9 @@ class CharGrid(private val lines: List<String>) {
                 this@CharGrid[c, null]?.let { append(it) }
             }
         }
+    }
+
+    override fun toString(): String {
+        return lines.joinToString(separator = "\n")
     }
 }

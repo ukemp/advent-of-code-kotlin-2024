@@ -66,8 +66,24 @@ value class Coordinate(private val packedValue: Long) {
         return (x - other.x).absoluteValue.toLong() + (y - other.y).absoluteValue
     }
 
+    fun turnRight(): Coordinate {
+        return when (this) {
+            UP -> RIGHT
+            RIGHT -> DOWN
+            DOWN -> LEFT
+            LEFT -> UP
+            else -> error("$this is not a direction")
+        }
+    }
+
     override fun toString(): String {
-        return "[$x, $y]"
+        return when (this) {
+            UP -> "[$x, $y] (up)"
+            RIGHT -> "[$x, $y] (right)"
+            DOWN -> "[$x, $y] (down)"
+            LEFT -> "[$x, $y] (left)"
+            else -> "[$x, $y]"
+        }
     }
 
     companion object {
