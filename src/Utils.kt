@@ -17,7 +17,9 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
     .toString(16)
     .padStart(32, '0')
 
-fun List<String>.mapToInt() = map { it.trim().toInt() }
+fun List<String>.mapToInt() = mapNotNull { if (it.isNotBlank()) it.trim().toInt() else null }
+
+fun List<String>.mapToLong() = mapNotNull { if (it.isNotBlank()) it.trim().toLong() else null }
 
 fun <T> MutableList<T>.swap(i1: Int, i2: Int) {
     val v1 = get(i1)
