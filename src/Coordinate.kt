@@ -30,6 +30,8 @@ value class Coordinate(private val packedValue: Long) {
 
     operator fun minus(other: Coordinate) = Coordinate(packInts(x - other.x, y - other.y))
 
+    operator fun times(other: Coordinate) = Coordinate(packInts(x * other.x, y * other.y))
+
     operator fun component1(): Int = x
 
     operator fun component2(): Int = y
