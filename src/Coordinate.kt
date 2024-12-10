@@ -4,33 +4,18 @@ import kotlin.math.absoluteValue
 import kotlin.math.sign
 
 @Suppress("NOTHING_TO_INLINE")
-inline fun Coordinate(x: Int, y: Int) = Coordinate(packInts(x, y))
-
-@Suppress("NOTHING_TO_INLINE")
 inline fun Coordinate(str: String, delimiter: Char = ','): Coordinate {
-    return Coordinate(
-        packInts(
-            str.substringBefore(delimiter).trim().toInt(),
-            str.substringAfter(delimiter).trim().toInt()
-        )
-    )
+    return Coordinate(str.substringBefore(delimiter).trim().toInt(), str.substringAfter(delimiter).trim().toInt())
 }
 
-@JvmInline
 @Suppress("MemberVisibilityCanBePrivate")
-value class Coordinate(private val packedValue: Long) {
+open class Coordinate(val x: Int, val y: Int) {
 
-    val x: Int
-        get() = (packedValue shr 32).toInt()
+    operator fun plus(other: Coordinate) = Coordinate(x + other.x, y + other.y)
 
-    val y: Int
-        get() = (packedValue and 0xFFFFFFFF).toInt()
+    operator fun minus(other: Coordinate) = Coordinate(x - other.x, y - other.y)
 
-    operator fun plus(other: Coordinate) = Coordinate(packInts(x + other.x, y + other.y))
-
-    operator fun minus(other: Coordinate) = Coordinate(packInts(x - other.x, y - other.y))
-
-    operator fun times(other: Coordinate) = Coordinate(packInts(x * other.x, y * other.y))
+    operator fun times(other: Coordinate) = Coordinate(x * other.x, y * other.y)
 
     operator fun component1(): Int = x
 
@@ -56,57 +41,43 @@ value class Coordinate(private val packedValue: Long) {
 
     val axialNeighbors: Sequence<Coordinate>
         get() = sequence<Coordinate> {
-            yield(UP + this@Coordinate)
-            yield(DOWN + this@Coordinate)
-            yield(LEFT + this@Coordinate)
-            yield(RIGHT + this@Coordinate)
+            yield(Direction.UP + this@Coordinate)
+            yield(Direction.DOWN + this@Coordinate)
+            yield(Direction.LEFT + this@Coordinate)
+            yield(Direction.RIGHT + this@Coordinate)
         }
 
     val diagonalNeighbors: Sequence<Coordinate>
         get() = sequence<Coordinate> {
-            yield(UP + LEFT + this@Coordinate)
-            yield(UP + RIGHT + this@Coordinate)
-            yield(DOWN + LEFT + this@Coordinate)
-            yield(DOWN + RIGHT + this@Coordinate)
+            yield(Direction.UP + Direction.LEFT + this@Coordinate)
+            yield(Direction.UP + Direction.RIGHT + this@Coordinate)
+            yield(Direction.DOWN + Direction.LEFT + this@Coordinate)
+            yield(Direction.DOWN + Direction.RIGHT + this@Coordinate)
         }
 
     val neighbors: Sequence<Coordinate>
         get() = axialNeighbors + diagonalNeighbors
 
 
-    fun manhattenDistanceTo(other: Coordinate): Long {
+    fun manhattanDistanceTo(other: Coordinate): Long {
         return (x - other.x).absoluteValue.toLong() + (y - other.y).absoluteValue
     }
 
-    fun turnRight(): Coordinate {
-        return when (this) {
-            UP -> RIGHT
-            RIGHT -> DOWN
-            DOWN -> LEFT
-            LEFT -> UP
-            else -> error("$this is not a direction")
-        }
+    override fun equals(other: Any?): Boolean {
+        if (other !is Coordinate) return false
+
+        return this.x == other.x && this.y == other.y
+    }
+
+    override fun hashCode(): Int {
+        return x xor y
     }
 
     override fun toString(): String {
-        return when (this) {
-            UP -> "[$x, $y] (up)"
-            RIGHT -> "[$x, $y] (right)"
-            DOWN -> "[$x, $y] (down)"
-            LEFT -> "[$x, $y] (left)"
-            else -> "[$x, $y]"
-        }
+        return "[$x, $y]"
     }
 
     companion object {
-        val ZERO = Coordinate(0, 0)
-        val UP = Coordinate(0, -1)
-        val DOWN = Coordinate(0, 1)
-        val LEFT = Coordinate(-1, 0)
-        val RIGHT = Coordinate(1, 0)
+        val ORIGIN = Coordinate(0, 0)
     }
-}
-
-fun packInts(x: Int, y: Int): Long {
-    return (x.toLong() shl 32) or (y.toLong() and 0xFFFFFFFF)
 }

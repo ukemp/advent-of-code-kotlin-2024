@@ -2,10 +2,11 @@ package day06
 
 import CharGrid
 import Coordinate
+import Direction
 import readLines
 import kotlin.time.measureTime
 
-data class Step(val position: Coordinate, val direction: Coordinate) {
+data class Step(val position: Coordinate, val direction: Direction) {
 
     fun move() = Step(position + direction, direction)
 
@@ -40,13 +41,13 @@ fun main() {
 
     fun part1(input: List<String>): Long {
         val grid = CharGrid(input)
-        var first = Step(grid.indexOf('^'), Coordinate.UP)
+        var first = Step(grid.indexOf('^'), Direction.UP)
         return walk(grid, first).map { it.position }.toSet().size.toLong()
     }
 
     fun part2(input: List<String>): Long {
         val grid = CharGrid(input)
-        var first = Step(grid.indexOf('^'), Coordinate.UP)
+        var first = Step(grid.indexOf('^'), Direction.UP)
         val visited = walk(grid, first).map { it.position }.toSet()
 
         return (visited - first.position).count { obstacle ->
