@@ -10,13 +10,10 @@ fun main() {
     fun part1(input: List<String>): Long {
         val grid = CharGrid(input)
         val antinodes = mutableSetOf<Coordinate>()
-        val uniqueFrequencies = mutableSetOf<Char>()
-        grid.forEach { g, p, c -> if (c != '.') uniqueFrequencies.add(c) }
+        val uniqueFrequencies = grid.all { p, c -> c != '.' }
 
         for (frequency in uniqueFrequencies) {
-            val positions = buildList {
-                grid.forEach { g, p, c -> if (c == frequency) add(p) }
-            }
+            val positions = grid.filter { _, c -> c == frequency }.toList()
             positions.forEachIndexed { index, p1 ->
                 for (i in positions.indices) {
                     if (i == index) {
@@ -24,10 +21,10 @@ fun main() {
                     }
                     val p2 = positions[i]
                     val d = p2 - p1
-                    if (grid.isInside(p1 - d)) {
+                    if ((p1 - d) in grid) {
                         antinodes.add(p1 - d)
                     }
-                    if (grid.isInside(p2 + d)) {
+                    if ((p2 + d) in grid) {
                         antinodes.add(p2 + d)
                     }
                 }
@@ -39,13 +36,10 @@ fun main() {
     fun part2(input: List<String>): Long {
         val grid = CharGrid(input)
         val antinodes = mutableSetOf<Coordinate>()
-        val uniqueFrequencies = mutableSetOf<Char>()
-        grid.forEach { g, p, c -> if (c != '.') uniqueFrequencies.add(c) }
+        val uniqueFrequencies = grid.all { p, c -> c != '.' }
 
         for (frequency in uniqueFrequencies) {
-            val positions = buildList {
-                grid.forEach { g, p, c -> if (c == frequency) add(p) }
-            }
+            val positions = grid.filter { _, c -> c == frequency }.toList()
             antinodes.addAll(positions)
             positions.forEachIndexed { index, p1 ->
                 for (i in positions.indices) {
@@ -56,13 +50,13 @@ fun main() {
                     val dx = p2 - p1
                     var d = dx
 
-                    while (grid.isInside(p1 - d)) {
+                    while ((p1 - d) in grid) {
                         antinodes.add(p1 - d)
                         d -= dx
                     }
 
                     d = dx
-                    while (grid.isInside(p2 + d)) {
+                    while ((p2 + d) in grid) {
                         antinodes.add(p2 + d)
                         d += dx
                     }

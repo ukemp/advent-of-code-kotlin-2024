@@ -25,24 +25,21 @@ fun main() {
     }
 
     fun part1(input: List<String>): Long {
-        var sum = 0L
+        val grid = CharGrid(input)
 
-        CharGrid(input).forEach { grid, position, c ->
-            directions.forEach {
-                if (grid.wordTo(position, it) == "XMAS") sum++
+        return grid.coordinates().sumOf { position ->
+            directions.sumOf {
+                if (grid.wordTo(position, it) == "XMAS") 1L else 0L
             }
         }
-
-        return sum
     }
 
     fun part2(input: List<String>): Long {
-        var sum = 0L
-        CharGrid(input).forEach { grid, position, _ ->
-            if (grid.hasXmas(position.x, position.y)) sum++
-        }
+        val grid = CharGrid(input)
 
-        return sum
+        return grid.coordinates().sumOf { position ->
+            if (grid.hasXmas(position.x, position.y)) 1L else 0L
+        }
     }
 
     val testInput = readLines("Day04_test")

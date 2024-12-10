@@ -31,10 +31,12 @@ class CharGrid(input: List<String>) {
         return this
     }
 
-    fun forEach(block: (CharGrid, Coordinate, Char) -> Unit) {
+    operator fun contains(c: Coordinate): Boolean = c.x in horizontalIndices && c.y in verticalIndices
+
+    fun coordinates() = sequence<Coordinate> {
         for (y in verticalIndices) {
             for (x in horizontalIndices) {
-                block(this, Coordinate(x, y), get(x, y)!!)
+                yield(Coordinate(x, y))
             }
         }
     }
@@ -50,6 +52,19 @@ class CharGrid(input: List<String>) {
         }
     }
 
+    fun all(predicate: (Coordinate, Char) -> Boolean): Set<Char> {
+        return buildSet {
+            for (y in verticalIndices) {
+                for (x in horizontalIndices) {
+                    val c = get(x, y)!!
+                    if (predicate(Coordinate(x, y), c)) {
+                        add(c)
+                    }
+                }
+            }
+        }
+    }
+
     fun indexOf(search: Char): Coordinate {
         for (y in verticalIndices) {
             val index = lines[y].indexOf(search)
@@ -57,10 +72,8 @@ class CharGrid(input: List<String>) {
                 return Coordinate(index, y)
             }
         }
-        error("Couldn't find a matching character")
+        error("Couldn't find character '$search'")
     }
-
-    fun isInside(c: Coordinate) = c.x in horizontalIndices && c.y in verticalIndices
 
     fun wordTo(from: Coordinate, relative: Coordinate): String {
         return buildString {

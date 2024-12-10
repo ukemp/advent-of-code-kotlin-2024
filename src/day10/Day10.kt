@@ -13,7 +13,7 @@ fun main() {
             score.add(position)
         } else {
             position.axialNeighbors.filter { neighbour ->
-                isInside(neighbour) && (get(neighbour, null)!!.digitToInt() == current + 1)
+                (neighbour in this) && (get(neighbour, null)!!.digitToInt() == current + 1)
             }.forEach {
                 walk(it, score)
             }

@@ -28,7 +28,7 @@ fun walk(grid: CharGrid, first: Step): Set<Step> {
     var current = first
     val visited = mutableSetOf<Step>()
 
-    while (grid.isInside(current.position)) {
+    while (current.position in grid) {
         visited.add(current)
         current = grid.nextPositionFor(current)
         if (current in visited) return emptySet()
