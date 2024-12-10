@@ -39,6 +39,17 @@ class CharGrid(input: List<String>) {
         }
     }
 
+    fun filter(predicate: (Coordinate, Char) -> Boolean) = sequence<Coordinate> {
+        for (y in verticalIndices) {
+            for (x in horizontalIndices) {
+                val c = Coordinate(x, y)
+                if (predicate(c, get(x, y)!!)) {
+                    yield(c)
+                }
+            }
+        }
+    }
+
     fun indexOf(search: Char): Coordinate {
         for (y in verticalIndices) {
             val index = lines[y].indexOf(search)

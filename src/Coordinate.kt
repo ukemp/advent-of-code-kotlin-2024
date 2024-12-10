@@ -54,13 +54,23 @@ value class Coordinate(private val packedValue: Long) {
         }
     }
 
-    val axialNeighbors: List<Coordinate>
-        get() = listOf(UP, DOWN, LEFT, RIGHT).map { it + this }
+    val axialNeighbors: Sequence<Coordinate>
+        get() = sequence<Coordinate> {
+            yield(UP + this@Coordinate)
+            yield(DOWN + this@Coordinate)
+            yield(LEFT + this@Coordinate)
+            yield(RIGHT + this@Coordinate)
+        }
 
-    val diagonalNeighbors: List<Coordinate>
-        get() = listOf(UP + LEFT, UP + RIGHT, DOWN + LEFT, DOWN + RIGHT).map { it + this }
+    val diagonalNeighbors: Sequence<Coordinate>
+        get() = sequence<Coordinate> {
+            yield(UP + LEFT + this@Coordinate)
+            yield(UP + RIGHT + this@Coordinate)
+            yield(DOWN + LEFT + this@Coordinate)
+            yield(DOWN + RIGHT + this@Coordinate)
+        }
 
-    val neighbors: List<Coordinate>
+    val neighbors: Sequence<Coordinate>
         get() = axialNeighbors + diagonalNeighbors
 
 
