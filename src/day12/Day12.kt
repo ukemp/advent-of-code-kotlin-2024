@@ -2,12 +2,13 @@ package day12
 
 import CharGrid
 import Coordinate
+import Direction
 import readLines
 import kotlin.time.measureTime
 
 class Regions() {
 
-    private val regions = mutableMapOf<Char, MutableList<Set<Coordinate>>>()
+    val regions = mutableMapOf<Char, MutableList<Set<Coordinate>>>()
 
     fun hasPlant(c: Char?, position: Coordinate): Boolean {
         if (regions.containsKey(c)) {
@@ -42,6 +43,15 @@ class Regions() {
             }
         }
     }
+
+    fun discountedPrice(): Long {
+        return regions.values.sumOf { region ->
+            region.sumOf { plant ->
+                val (a, p) = areaAndDiscountedPerimeter(plant)
+                (a * p).toLong()
+            }
+        }
+    }
 }
 
 fun CharGrid.findRegion(position: Coordinate, region: MutableSet<Coordinate>) {
@@ -55,14 +65,34 @@ fun CharGrid.findRegion(position: Coordinate, region: MutableSet<Coordinate>) {
 }
 
 fun areaAndPerimeter(coordinates: Set<Coordinate>): Pair<Int, Int> {
-    val p = coordinates.sumOf { c ->
-        var perimeter = 4
-        for (neighbour in c.axialNeighbors) {
-            if (neighbour in coordinates) perimeter--
-        }
-        perimeter
+    val perimeter = coordinates.sumOf { c ->
+        4 - c.axialNeighbors.count { neighbour -> neighbour in coordinates }
     }
-    return coordinates.size to p
+    return coordinates.size to perimeter
+}
+
+fun areaAndDiscountedPerimeter(coordinates: Set<Coordinate>): Pair<Int, Int> {
+    var sides = 0
+
+    listOf<Direction>(Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT).forEach { direction ->
+        val visited = mutableSetOf<Coordinate>()
+
+        for (c in coordinates) {
+            if (c in visited) {
+                continue
+            } else if ((c + direction) !in coordinates) {
+                sides++
+                listOf(direction.turnLeft(), direction.turnRight()).forEach { perpendicular ->
+                    var next = c + perpendicular
+                    while (next in coordinates && (next + direction) !in coordinates) {
+                        visited.add(next)
+                        next += perpendicular
+                    }
+                }
+            }
+        }
+    }
+    return coordinates.size to sides
 }
 
 fun main() {
@@ -83,12 +113,24 @@ fun main() {
     }
 
     fun part2(input: List<String>): Long {
-        return input.size.toLong()
+        val grid = CharGrid(input)
+        val regions = Regions()
+
+        for (position in grid.coordinates()) {
+            val c = grid[position, ' ']!!
+            if (!regions.hasPlant(c, position)) {
+                val region = mutableSetOf(position)
+                grid.findRegion(position, region)
+                regions.add(c, region)
+            }
+        }
+        areaAndDiscountedPerimeter(regions.regions['J']!![0])
+        return regions.discountedPrice()
     }
 
     val testInput = readLines("Day12_test")
     check(part1(testInput).also(::println) == 1930L)
-    //check(part2(testInput).also(::println) == 1L)
+    check(part2(testInput).also(::println) == 1206L)
 
     val input = readLines("Day12")
 
