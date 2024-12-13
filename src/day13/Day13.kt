@@ -6,7 +6,7 @@ import kotlin.time.measureTime
 data class ClawMachine(val ax: Long, val ay: Long, val bx: Long, val by: Long, val px: Long, val py: Long) {
 
     fun solveOrNull(): Pair<Long, Long>? {
-        val i = ((py * bx) - (by * px)) / ((ay * bx) - (by * ax))
+        val i = ((bx * py) - (by * px)) / ((ay * bx) - (ax * by))
         val j = (px - (ax * i)) / bx
         val checkX = (ax * i) + (bx * j)
         val checkY = (ay * i) + (by * j)
