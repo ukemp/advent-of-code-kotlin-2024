@@ -41,4 +41,26 @@ sealed class Direction(x: Int, y: Int) : Coordinate(x, y) {
             LEFT -> DOWN
         }
     }
+
+    fun revert(): Direction {
+        return when (this) {
+            UP -> DOWN
+            RIGHT -> LEFT
+            DOWN -> UP
+            LEFT -> RIGHT
+        }
+    }
+
+    companion object {
+
+        fun from(c: Char): Direction {
+            return when (c) {
+                '<' -> LEFT
+                '^' -> UP
+                '>' -> RIGHT
+                'v' -> DOWN
+                else -> error("Unexpected direction: $c (valid chars are < ^ > v)")
+            }
+        }
+    }
 }
