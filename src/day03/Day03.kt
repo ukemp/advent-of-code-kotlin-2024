@@ -1,6 +1,6 @@
 package day03
 
-import readLines
+import util.readLines
 import kotlin.time.measureTime
 
 val mul = """mul\((\d+),(\d+)\)""".toRegex()

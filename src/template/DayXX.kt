@@ -1,6 +1,6 @@
 package template
 
-import readLines
+import util.readLines
 import kotlin.time.measureTime
 
 fun main() {

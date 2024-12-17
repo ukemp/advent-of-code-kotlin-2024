@@ -1,6 +1,6 @@
 package day01
 
-import readLines
+import util.readLines
 import kotlin.math.absoluteValue
 import kotlin.to
 

@@ -1,9 +1,9 @@
 package day12
 
-import CharGrid
-import Coordinate
-import Direction
-import readLines
+import util.CharGrid
+import util.Coordinate
+import util.Direction
+import util.readLines
 import kotlin.time.measureTime
 
 class Regions() {

@@ -1,3 +1,5 @@
+package util
+
 sealed class Direction(x: Int, y: Int) : Coordinate(x, y) {
 
     object UP : Direction(0, -1) {

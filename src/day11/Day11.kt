@@ -1,7 +1,7 @@
 package day11
 
-import mapToLong
-import readLines
+import util.mapToLong
+import util.readLines
 import java.math.BigInteger
 import kotlin.math.ln
 import kotlin.time.measureTime

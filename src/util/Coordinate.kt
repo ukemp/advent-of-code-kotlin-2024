@@ -1,5 +1,7 @@
 @file:Suppress("unused")
 
+package util
+
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 

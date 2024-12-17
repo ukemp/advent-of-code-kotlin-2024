@@ -1,8 +1,8 @@
 package day05
 
-import mapToInt
-import readText
-import swap
+import util.mapToInt
+import util.readText
+import util.swap
 import kotlin.time.measureTime
 
 fun main() {

@@ -1,7 +1,7 @@
 package day07
 
-import mapToLong
-import readLines
+import util.mapToLong
+import util.readLines
 import kotlin.time.measureTime
 
 data class Equation(val result: Long, val operands: List<Long>) {

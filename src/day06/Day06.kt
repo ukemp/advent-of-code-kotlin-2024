@@ -1,9 +1,9 @@
 package day06
 
-import CharGrid
-import Coordinate
-import Direction
-import readLines
+import util.CharGrid
+import util.Coordinate
+import util.Direction
+import util.readLines
 import kotlin.time.measureTime
 
 data class Step(val position: Coordinate, val direction: Direction) {

@@ -1,7 +1,7 @@
 package day14
 
-import Coordinate
-import readLines
+import util.Coordinate
+import util.readLines
 import kotlin.time.measureTime
 
 data class Robot(val position: Coordinate, val velocity: Coordinate)

@@ -1,8 +1,8 @@
 package day08
 
-import CharGrid
-import Coordinate
-import readLines
+import util.CharGrid
+import util.Coordinate
+import util.readLines
 import kotlin.time.measureTime
 
 fun main() {

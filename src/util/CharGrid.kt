@@ -1,3 +1,5 @@
+package util
+
 class CharGrid(input: List<String>) {
 
     private val lines = input.toMutableList()

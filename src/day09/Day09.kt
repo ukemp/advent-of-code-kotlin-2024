@@ -1,7 +1,7 @@
 package day09
 
-import readLines
-import swap
+import util.readLines
+import util.swap
 import kotlin.time.measureTime
 
 fun main() {

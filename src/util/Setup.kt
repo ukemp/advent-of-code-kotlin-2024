@@ -1,3 +1,5 @@
+package util
+
 import java.io.FileNotFoundException
 import kotlin.io.path.Path
 import kotlin.io.path.absolute

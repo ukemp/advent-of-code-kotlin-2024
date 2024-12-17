@@ -1,3 +1,5 @@
+package util
+
 import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.io.path.Path
@@ -11,7 +13,7 @@ fun readLines(name: String) = Path("src/$name.txt").readText().trim().lines()
 fun readText(name: String) = Path("src/$name.txt").readText().trim()
 
 /**
- * Converts string to md5 hash.
+ * Converts string to util.md5 hash.
  */
 fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray()))
     .toString(16)

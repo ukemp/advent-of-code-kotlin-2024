@@ -1,6 +1,6 @@
 package day02
 
-import readLines
+import util.readLines
 import kotlin.math.absoluteValue
 
 fun main() {

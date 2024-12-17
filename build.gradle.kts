@@ -9,6 +9,7 @@ sourceSets {
         kotlin.srcDir("src")
         dependencies {
             implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.4.13")
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
         }
     }
 }

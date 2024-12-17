@@ -1,9 +1,9 @@
 package day16
 
-import CharGrid
-import Coordinate
-import Direction
-import readLines
+import util.CharGrid
+import util.Coordinate
+import util.Direction
+import util.readLines
 import java.util.PriorityQueue
 import kotlin.time.measureTime
 

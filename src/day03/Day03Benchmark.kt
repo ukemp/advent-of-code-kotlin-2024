@@ -4,13 +4,13 @@ import kotlinx.benchmark.Benchmark
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.Setup
 import kotlinx.benchmark.State
-import readLines
+import util.readLines
 
 @State(Scope.Benchmark)
 class Day03Benchmark() {
 
     /*
-    main summary:
+    util.main summary:
     Benchmark                 Mode  Cnt      Score     Error  Units
     Day03Benchmark.allRegex  thrpt    5   5142,924 ±  75,607  ops/s
     Day03Benchmark.indexOf   thrpt    5  19141,321 ± 155,539  ops/s

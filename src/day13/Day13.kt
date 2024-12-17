@@ -1,6 +1,6 @@
 package day13
 
-import readLines
+import util.readLines
 import kotlin.time.measureTime
 
 data class ClawMachine(val ax: Long, val ay: Long, val bx: Long, val by: Long, val px: Long, val py: Long) {
