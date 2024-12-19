@@ -19,7 +19,7 @@ fun allPossibleDesigns(design: String, towels: List<String>, cache: MutableMap<S
             1
         } else {
             towels.filter { design.startsWith(it) }
-                .sumOf { towel -> allPossibleDesigns(design.drop(towel.length), towels, cache) }
+                .sumOf { towel -> allPossibleDesigns(design.substring(towel.length), towels, cache) }
         }
     }
 }
